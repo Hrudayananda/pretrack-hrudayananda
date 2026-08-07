@@ -84,3 +84,71 @@ first_attempt_found = False
 critical_score_found = False
 first_critical_day = 0
 first_critical_score = 0
+
+# --------------------------------------------------
+# 3. PROCESS SEVEN PRACTICE DAYS
+# --------------------------------------------------
+
+for day in range(1, 8):
+
+    # Use a while loop to accept only -1 or a score between 0 and 100.
+    while True:
+        score = int(
+            input(
+                f"Enter Day {day} score from 0 to 100, "
+                "or -1 for absent: "
+            )
+        )
+        if score == -1 or (0 <= score <= 100):
+            break
+        print("Invalid score. Enter -1 or a value between 0 and 100.")
+
+    # Handle absence: Increase absent_days and use continue.
+    if score == -1:
+        absent_days += 1
+        continue
+
+    # Increase attempted_days and total_score.
+    attempted_days += 1
+    total_score += score
+
+    # Initialize or update highest/lowest scores and days.
+    if not first_attempt_found:
+        highest_score = score
+        highest_score_day = day
+        lowest_score = score
+        lowest_score_day = day
+        first_attempt_found = True
+    else:
+        if score > highest_score:
+            highest_score = score
+            highest_score_day = day
+        if score < lowest_score:
+            lowest_score = score
+            lowest_score_day = day
+
+    # Classify the score:
+    # 75–100  -> Strong
+    # 60–74   -> Satisfactory
+    # 40–59   -> Needs Improvement
+    # 0–39    -> Critical
+    if 75 <= score <= 100:
+        strong_days += 1
+    elif 60 <= score <= 74:
+        satisfactory_days += 1
+    elif 40 <= score <= 59:
+        improvement_days += 1
+    else:
+        critical_days += 1
+
+    # Count passed and failed days.
+    if score >= 60:
+        passed_days += 1
+    else:
+        failed_days += 1
+
+    # Store only the first critical day and score.
+    if score < 40 and not critical_score_found:
+        critical_score_found = True
+        first_critical_day = day
+        first_critical_score = score
