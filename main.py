@@ -152,3 +152,35 @@ for day in range(1, 8):
         critical_score_found = True
         first_critical_day = day
         first_critical_score = score
+
+# --------------------------------------------------
+# 4. CALCULATE AVERAGE SCORE
+# --------------------------------------------------
+
+if attempted_days > 0:
+    average_score = total_score / attempted_days
+else:
+    average_score = 0.0
+
+# --------------------------------------------------
+# 5. CREATE ELIGIBILITY CONDITIONS
+# --------------------------------------------------
+
+graduation_eligible = (2025 <= graduation_year <= 2027)
+attendance_eligible = (attendance >= 75)
+practice_count_eligible = (attempted_days >= 6)
+average_eligible = (average_score >= 70)
+critical_score_clear = not critical_score_found
+passed_days_eligible = (passed_days >= 4)
+
+placement_ready = (
+    graduation_eligible
+    and attendance_eligible
+    and practice_count_eligible
+    and average_eligible
+    and critical_score_clear
+    and passed_days_eligible
+    and project_completed
+    and profile_verified
+)
+
