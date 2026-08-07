@@ -85,35 +85,43 @@ critical_score_found = False
 first_critical_day = 0
 first_critical_score = 0
 
-# --------------------------------------------------
 # 3. PROCESS SEVEN PRACTICE DAYS
-# --------------------------------------------------
 
 for day in range(1, 8):
-
-    # Use a while loop to accept only -1 or a score between 0 and 100.
+    # Validate score
     while True:
-        score = int(
-            input(
-                f"Enter Day {day} score from 0 to 100, "
-                "or -1 for absent: "
-            )
-        )
-        if score == -1 or (0 <= score <= 100):
+        score = int(input("Enter Day " + str(day) + " score from 0 to 100, or -1 for absent: "))
+        if score == -1 or (score >= 0 and score <= 100):
             break
         print("Invalid score. Enter -1 or a value between 0 and 100.")
-
-    # Handle absence: Increase absent_days and use continue.
+    # Handle absent day
     if score == -1:
         absent_days += 1
+        print("Day", day, "Result: Absent")
         continue
-
-    # Increase attempted_days and total_score.
+    # Count attempted days and total
     attempted_days += 1
     total_score += score
-
-    # Initialize or update highest/lowest scores and days.
-    if not first_attempt_found:
+    # Count passed and failed
+    if score >= 60:
+        passed_days += 1
+    else:
+        failed_days += 1
+    # Classify score
+    if score >= 75:
+        strong_days += 1
+        print("Day", day, "Result: Strong")
+    elif score >= 60:
+        satisfactory_days += 1
+        print("Day", day, "Result: Satisfactory")
+    elif score >= 40:
+        improvement_days += 1
+        print("Day", day, "Result: Needs Improvement")
+    else:
+        critical_days += 1
+        print("Day", day, "Result: Critical")
+    # Highest and lowest score
+    if first_attempt_found == False:
         highest_score = score
         highest_score_day = day
         lowest_score = score
@@ -127,31 +135,12 @@ for day in range(1, 8):
             lowest_score = score
             lowest_score_day = day
 
-    # Classify the score:
-    # 75–100  -> Strong
-    # 60–74   -> Satisfactory
-    # 40–59   -> Needs Improvement
-    # 0–39    -> Critical
-    if 75 <= score <= 100:
-        strong_days += 1
-    elif 60 <= score <= 74:
-        satisfactory_days += 1
-    elif 40 <= score <= 59:
-        improvement_days += 1
-    else:
-        critical_days += 1
-
-    # Count passed and failed days.
-    if score >= 60:
-        passed_days += 1
-    else:
-        failed_days += 1
-
-    # Store only the first critical day and score.
-    if score < 40 and not critical_score_found:
+    # First critical score
+    if score < 40:
         critical_score_found = True
-        first_critical_day = day
-        first_critical_score = score
+        if first_critical_day == 0:
+            first_critical_day = day
+            first_critical_score = score
 
 # --------------------------------------------------
 # 4. CALCULATE AVERAGE SCORE
