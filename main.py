@@ -184,3 +184,60 @@ placement_ready = (
     and profile_verified
 )
 
+# --------------------------------------------------
+# 6. DETERMINE FINAL STATUS
+# --------------------------------------------------
+
+# Check conditions in this priority:
+# 1. No practice attempted
+# 2. Critical score found
+# 3. Fewer than six attempts
+# 4. Fewer than four passed days
+# 5. Average below 70
+# 6. Attendance below 75
+# 7. Graduation year not eligible
+# 8. Project incomplete
+# 9. Profile not verified
+# 10. Ready for Mock Interview
+
+if attempted_days == 0:
+    final_status = "Not Eligible"
+    primary_blocker = "No practice days attempted"
+    next_action = "Attempt at least 6 practice days"
+elif critical_score_found:
+    final_status = "Not Eligible"
+    primary_blocker = f"Critical score found on Day {first_critical_day} (Score: {first_critical_score})"
+    next_action = "Complete remedial practice for critical score"
+elif attempted_days < 6:
+    final_status = "Not Eligible"
+    primary_blocker = f"Fewer than 6 practice attempts ({attempted_days}/7 attempted)"
+    next_action = "Attempt more practice days to reach minimum 6 attempts"
+elif passed_days < 4:
+    final_status = "Not Eligible"
+    primary_blocker = f"Fewer than 4 passed days ({passed_days} passed)"
+    next_action = "Improve score on failed practice days to pass at least 4 days"
+elif average_score < 70:
+    final_status = "Not Eligible"
+    primary_blocker = f"Average score below 70 ({average_score:.2f})"
+    next_action = "Raise overall practice average score to 70 or higher"
+elif attendance < 75:
+    final_status = "Not Eligible"
+    primary_blocker = f"Attendance below 75% ({attendance}%)"
+    next_action = "Improve attendance percentage to at least 75%"
+elif not graduation_eligible:
+    final_status = "Not Eligible"
+    primary_blocker = f"Graduation year ({graduation_year}) outside eligible range (2025-2027)"
+    next_action = "Verify graduation year with administration"
+elif not project_completed:
+    final_status = "Not Eligible"
+    primary_blocker = "Required project not completed"
+    next_action = "Complete and submit the required project"
+elif not profile_verified:
+    final_status = "Not Eligible"
+    primary_blocker = "Student profile not verified"
+    next_action = "Complete student profile verification"
+else:
+    final_status = "Ready for Mock Interview"
+    primary_blocker = "None"
+    next_action = "Proceed to Mock Interview"
+
